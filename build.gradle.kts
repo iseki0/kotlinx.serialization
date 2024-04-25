@@ -188,4 +188,4 @@ val documentedSubprojects get() = setOf("kotlinx-serialization-core",
     "kotlinx-serialization-hocon",
     "kotlinx-serialization-protobuf")
 
-val uncoveredProjects get() = setOf("kotlinx-serialization-bom", "benchmark", "guide", "kotlinx-serialization-json-okio")
+val uncoveredProjects get() = setOf("kotlinx-serialization-bom", "benchmark", "guide", "kotlinx-serialization-json-okio", "kotlinx-serialization-json-kxio")

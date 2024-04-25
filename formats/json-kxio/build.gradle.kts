@@ -7,12 +7,11 @@ import java.net.*
 
 plugins {
     kotlin("multiplatform")
-    alias(libs.plugins.serialization)
+    kotlin("plugin.serialization")
 
     id("native-targets-conventions")
     id("source-sets-conventions")
 }
-
 
 kotlin {
     sourceSets {
@@ -26,12 +25,12 @@ kotlin {
             dependencies {
                 api(project(":kotlinx-serialization-core"))
                 api(project(":kotlinx-serialization-json"))
-                implementation(libs.okio)
+                implementation(libs.kotlinx.io)
             }
         }
         val commonTest by getting {
             dependencies {
-                implementation(libs.okio)
+                implementation(libs.kotlinx.io)
             }
         }
     }
@@ -39,25 +38,16 @@ kotlin {
 
 project.configureJava9ModuleInfo()
 
-tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
-    dokkaSourceSets {
-        configureEach {
-            externalDocumentationLink {
-                url.set(URL("https://square.github.io/okio/3.x/okio/"))
-                packageListUrl.set(
-                    file("dokka/okio.package.list").toURI().toURL()
-                )
-            }
-        }
-    }
-}
-
-
-// TODO: Remove this after okio will be updated to the version with 1.9.20 stdlib dependency (3.9.0)
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.name == "kotlin-stdlib-wasm") {
-            useTarget("org.jetbrains.kotlin:kotlin-stdlib-wasm-js:${requested.version}")
-        }
-    }
-}
+// TODO DOKKA
+//tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
+//    dokkaSourceSets {
+//        configureEach {
+//            externalDocumentationLink {
+//                url.set(URL("https://square.github.io/okio/3.x/okio/"))
+//                packageListUrl.set(
+//                    file("dokka/okio.package.list").toURI().toURL()
+//                )
+//            }
+//        }
+//    }
+//}
