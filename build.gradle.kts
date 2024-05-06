@@ -11,6 +11,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     id("org.jetbrains.dokka")
     id("benchmark-conventions")
+    id("org.jetbrains.kotlinx.kover")
 
     alias(libs.plugins.serialization) apply false
 }
@@ -55,6 +56,7 @@ allprojects {
     }
     repositories {
         mavenCentral()
+        maven("https://oss.sonatype.org/content/repositories/orgjetbrainskotlinx-3303")
     }
 }
 
@@ -125,9 +127,50 @@ subprojects {
 }
 
 // == Kover setup ==
-subprojects {
-    if (uncoveredProjects.contains(project.name)) return@subprojects
-    apply(plugin = "kover-conventions")
+kover {
+    if (hasProperty("kover.enabled") && property("kover.enabled") != "true") {
+        disable()
+    }
+
+    currentProject {
+        projectsForCoverageVerification.forEach { (variantName, _) ->
+            copyVariant(variantName, "main")
+        }
+    }
+
+    merge {
+        subprojects { subproject ->
+            subproject.path !in uncoveredProjects
+        }
+
+        createVariant("main") { add("jvm", optional = true) }
+    }
+
+    reports {
+        total {
+            verify {
+                rule("Total coverage") {
+                    minBound(90)
+                }
+            }
+        }
+
+        projectsForCoverageVerification.forEach { (variantName, projectPath) ->
+            variant(variantName) {
+                filters {
+                    includes {
+                        projects.add(projectPath)
+                    }
+                }
+                verify {
+                    onCheck = true
+                    rule("Coverage for $projectPath") {
+                        minBound(85)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // == Dokka setup ==
@@ -188,4 +231,5 @@ val documentedSubprojects get() = setOf("kotlinx-serialization-core",
     "kotlinx-serialization-hocon",
     "kotlinx-serialization-protobuf")
 
-val uncoveredProjects get() = setOf("kotlinx-serialization-bom", "benchmark", "guide", "kotlinx-serialization-json-okio")
+val uncoveredProjects get() = setOf(":kotlinx-serialization-bom", ":benchmark", ":guide")
+val projectsForCoverageVerification get() = mapOf("core" to ":kotlinx-serialization-core", "json" to ":kotlinx-serialization-json", "jsonOkio" to ":kotlinx-serialization-json-okio", "cbor" to ":kotlinx-serialization-cbor", "hocon" to ":kotlinx-serialization-hocon", "properties" to ":kotlinx-serialization-properties", "protobuf" to ":kotlinx-serialization-protobuf")

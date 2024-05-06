@@ -35,6 +35,8 @@ repositories {
 
     mavenCentral()
     mavenLocal()
+
+    maven("https://oss.sonatype.org/content/repositories/orgjetbrainskotlinx-3303")
 }
 
 dependencies {

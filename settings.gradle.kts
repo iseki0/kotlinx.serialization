@@ -34,6 +34,8 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
+
+        maven("https://oss.sonatype.org/content/repositories/orgjetbrainskotlinx-3302")
     }
 }
 
