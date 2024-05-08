@@ -38,16 +38,12 @@ kotlin {
 
 project.configureJava9ModuleInfo()
 
-// TODO DOKKA
-//tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
-//    dokkaSourceSets {
-//        configureEach {
-//            externalDocumentationLink {
-//                url.set(URL("https://square.github.io/okio/3.x/okio/"))
-//                packageListUrl.set(
-//                    file("dokka/okio.package.list").toURI().toURL()
-//                )
-//            }
-//        }
-//    }
-//}
+tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
+    dokkaSourceSets {
+        configureEach {
+            externalDocumentationLink {
+                url.set(URL("https://kotlin.github.io/kotlinx-io/"))
+            }
+        }
+    }
+}

@@ -183,6 +183,7 @@ val experimentalsInTestEnabled get() = listOf(
 val documentedSubprojects get() = setOf("kotlinx-serialization-core",
     "kotlinx-serialization-json",
     "kotlinx-serialization-json-okio",
+    "kotlinx-serialization-json-kxio",
     "kotlinx-serialization-cbor",
     "kotlinx-serialization-properties",
     "kotlinx-serialization-hocon",
